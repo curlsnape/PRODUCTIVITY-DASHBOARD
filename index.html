@@ -21,40 +21,31 @@
 
         <nav class="mt-10 space-y-2">
           <a
-            href="#"
+            href="#dashboard"
             class="flex items-center gap-3 p-3 rounded-lg bg-blue-500 text-white"
           >
             <i class="ri-dashboard-line"></i>
             Dashboard
           </a>
 
-          <a
-            href="#"
-            class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
-          >
+          <a href="#tasks" class="flex items-center gap-3 p-3 rounded-lg">
             <i class="ri-task-line"></i>
             Tasks
           </a>
 
-          <a
-            href="#"
-            class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
-          >
+          <a href="#pomodoro" class="flex items-center gap-3 p-3 rounded-lg">
             <i class="ri-timer-line"></i>
             Pomodoro
           </a>
 
-          <a
-            href="#"
-            class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
-          >
+          <a href="#settings" class="flex items-center gap-3 p-3 rounded-lg">
             <i class="ri-settings-3-line"></i>
             Settings
           </a>
         </nav>
       </aside>
 
-      <main class="flex-1">
+      <main id="dashboard" class="flex-1">
         <header
           class="bg-white shadow px-8 py-5 flex justify-between items-center"
         >
@@ -76,7 +67,7 @@
         </header>
 
         <div class="p-8 grid lg:grid-cols-3 gap-6">
-          <section class="lg:col-span-2 space-y-6">
+          <section id="tasks" class="lg:col-span-2 space-y-6">
             <div class="bg-white rounded-xl shadow p-6">
               <h3 class="text-xl font-semibold mb-5">Todo List</h3>
               <p id="taskCounter" class="text-sm text-gray-500 mb-4">
@@ -114,7 +105,7 @@
           </section>
 
           <section class="space-y-6">
-            <div class="bg-white rounded-xl shadow p-6">
+            <div id="pomodoro" class="bg-white rounded-xl shadow p-6">
               <h3 class="font-semibold text-lg mb-4">Pomodoro Timer</h3>
 
               <div class="text-center">
@@ -192,13 +183,13 @@
                   <p id="weatherCondition" class="text-sm">--</p>
 
                   <div class="flex gap-5 mt-4 text-sm">
-                    <p>
-                      💧
+                    <p class="flex items-center gap-2">
+                      <i class="ri-drop-line"></i>
                       <span id="humidity">--</span>
                     </p>
 
-                    <p>
-                      🌬
+                    <p class="flex items-center gap-2">
+                      <i class="ri-windy-line"></i>
                       <span id="wind">--</span>
                     </p>
                   </div>
@@ -224,7 +215,7 @@
               <p id="currentTime" class="text-gray-500 mt-2 text-lg"></p>
             </div>
 
-            <div class="bg-white rounded-xl shadow p-6">
+            <div id="settings" class="bg-white rounded-xl shadow p-6">
               <h3 class="font-semibold text-lg mb-4">Daily Goals</h3>
 
               <ul class="space-y-3">

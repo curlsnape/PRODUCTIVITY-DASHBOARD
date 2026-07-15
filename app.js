@@ -22,6 +22,7 @@ const profileBtn = document.getElementById("profileBtn");
 const profileSidebar = document.getElementById("profileSidebar");
 const profileBackdrop = document.getElementById("profileBackdrop");
 const closeProfile = document.getElementById("closeProfile");
+const navLinks = document.querySelectorAll("aside nav a");
 let darkMode = JSON.parse(localStorage.getItem("darkMode")) || false;
 let totalSeconds = 25 * 60;
 let plannerTimeout;
@@ -31,7 +32,6 @@ if (darkMode) {
   document.body.classList.add("dark");
   themeBtn.innerHTML = '<i class="ri-moon-clear-fill text-xl"></i>';
 }
-
 profileBtn.addEventListener("click", function () {
   profileSidebar.style.right = "0";
   profileBackdrop.classList.remove("hidden");
@@ -46,20 +46,39 @@ closeProfile.addEventListener("click", closeSidebar);
 
 profileBackdrop.addEventListener("click", closeSidebar);
 function applyTheme() {
+  const cards = document.querySelectorAll(".bg-white, .bg-gray-800");
+  const inputs = document.querySelectorAll("input, textarea");
+  const topButtons = document.querySelectorAll("#themeBtn, #profileBtn");
+
   if (darkMode) {
-    document.body.classList.remove("bg-gray-100");
-    document.body.classList.add("bg-gray-900");
-    document.querySelectorAll(".bg-white").forEach(function (card) {
+    document.body.classList.replace("bg-gray-100", "bg-gray-900");
+
+    cards.forEach((card) => {
       card.classList.remove("bg-white");
       card.classList.add("bg-gray-800", "text-white");
     });
-  } else {
-    document.body.classList.remove("bg-gray-900");
-    document.body.classList.add("bg-gray-100");
-    document.querySelectorAll(".bg-gray-800").forEach(function (card) {
-      card.classList.remove("bg-gray-800", "text-white");
 
+    inputs.forEach((input) => {
+      input.classList.add("bg-gray-700", "text-white", "border-gray-600");
+    });
+    topButtons.forEach((btn) => {
+      btn.classList.remove("bg-gray-100");
+      btn.classList.add("bg-gray-700", "text-white");
+    });
+  } else {
+    document.body.classList.replace("bg-gray-900", "bg-gray-100");
+
+    cards.forEach((card) => {
+      card.classList.remove("bg-gray-800", "text-white");
       card.classList.add("bg-white");
+    });
+
+    inputs.forEach((input) => {
+      input.classList.remove("bg-gray-700", "text-white", "border-gray-600");
+    });
+    topButtons.forEach((btn) => {
+      btn.classList.remove("bg-gray-700", "text-white");
+      btn.classList.add("bg-gray-100");
     });
   }
 }
@@ -69,12 +88,15 @@ applyTheme();
 themeBtn.addEventListener("click", function () {
   darkMode = !darkMode;
   localStorage.setItem("darkMode", JSON.stringify(darkMode));
+
   if (darkMode) {
     themeBtn.innerHTML = '<i class="ri-moon-clear-fill text-xl"></i>';
   } else {
     themeBtn.innerHTML = '<i class="ri-sun-line text-xl"></i>';
   }
+
   applyTheme();
+  renderTasks();
 });
 
 function updateDateTime() {
@@ -114,8 +136,14 @@ const links = document.querySelectorAll("aside a");
 
 links.forEach(function (link) {
   link.addEventListener("click", function () {
+
     links.forEach(function (item) {
-      item.classList.remove("bg-blue-500", "text-white");
+      item.classList.remove(
+        "bg-blue-500",
+        "bg-gray-100",
+        "bg-gray-700",
+        "text-white"
+      );
     });
 
     this.classList.add("bg-blue-500", "text-white");
@@ -255,8 +283,9 @@ function renderTasks() {
   tasks.forEach(function (task) {
     const div = document.createElement("div");
 
-    div.className =
-      "flex items-center justify-between p-4 rounded-lg bg-gray-100";
+    div.className = `flex items-center justify-between p-4 rounded-lg ${
+      darkMode ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-900"
+    }`;
 
     div.innerHTML = `
         <div class="flex items-center gap-3">
@@ -264,9 +293,13 @@ function renderTasks() {
               task.completed ? "checked" : ""
             } data-id="${task.id}" class="checkTask">
 
-            <p class="${
-              task.completed ? "line-through text-gray-500" : ""
-            }">${task.name}</p>
+  <p class="${
+    task.completed
+      ? "line-through text-gray-400"
+      : darkMode
+        ? "text-white"
+        : "text-gray-900"
+  }">${task.name}</p>
         </div>
 
         <button class="deleteTask text-red-500" data-id="${task.id}">
@@ -358,23 +391,44 @@ function updateGreeting() {
   const hour = new Date().getHours();
 
   if (hour < 12) {
-    greeting.textContent = "Good Morning ☀️";
+    greeting.innerHTML =
+      'Good Morning <i class="ri-sun-line text-yellow-500 ml-2"></i>';
   } else if (hour < 17) {
-    greeting.textContent = "Good Afternoon 🌤️";
+    greeting.innerHTML =
+      'Good Afternoon <i class="ri-sun-cloudy-line text-yellow-500 ml-2"></i>';
   } else if (hour < 20) {
-    greeting.textContent = "Good Evening 🌇";
+    greeting.innerHTML =
+      'Good Evening <i class="ri-sunset-line text-orange-500 ml-2"></i>';
   } else {
-    greeting.textContent = "Good Night 🌙";
+    greeting.innerHTML =
+      'Good Night <i class="ri-moon-clear-line text-blue-400 ml-2"></i>';
   }
 }
 
+
+
+navLinks.forEach(link => {
+  link.addEventListener("mouseenter", () => {
+    if (!link.classList.contains("bg-blue-500")) {
+      link.classList.add(darkMode ? "bg-gray-700" : "bg-gray-100");
+    }
+  });
+
+  link.addEventListener("mouseleave", () => {
+    if (!link.classList.contains("bg-blue-500")) {
+      link.classList.remove("bg-gray-700", "bg-gray-100");
+    }
+  });
+});
+
 setInterval(updateGreeting, 60000);
+updateGreeting();
 
 renderTasks();
+applyTheme();
 
 goalChecks.forEach(function (goal, index) {
   goal.checked = JSON.parse(localStorage.getItem("goal" + index)) || false;
-
   goal.addEventListener("change", function () {
     localStorage.setItem("goal" + index, JSON.stringify(goal.checked));
   });
